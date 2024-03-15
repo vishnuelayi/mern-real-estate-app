@@ -19,7 +19,7 @@ const Login = () => {
     <div className='max-w-lg mx-auto'>
       <h1 className='font-semibold text-3xl text-center my-7'>Login</h1>
       <form className='flex flex-col gap-4'>
-        <input type='text' placeholder='Username' className='border p-3 rounded-lg focus:outline-none' id='username' onChange={handleChange} />
+        <input type='text' placeholder='Email or Username' className='border p-3 rounded-lg focus:outline-none' id='usernameOrEmail' onChange={handleChange} />
         <input type='password' placeholder='Password' className='border p-3 rounded-lg focus:outline-none' id='password' onChange={handleChange} />
         <button type='submit'  className=' text-white bg-slate-700 py-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-40' onClick={handleSubmit}>Login</button>
         <button  className='text-white bg-red-600 py-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-40' >Login with google</button>
