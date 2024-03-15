@@ -24,3 +24,22 @@ export const signupController = asyncHandler(async (req, res) => {
         res.status(500).json({ message: "Error creating user", error: error.message });
     }
 });
+
+
+export const loginController = asyncHandler(async (req, res) => {
+    const { username, password } = req.body;
+    const isValidUser = await User.findOne({ username });
+    if(!isValidUser) {
+        res.status(401);
+        throw new Error("Invalid Credentials");
+    }
+    const isPasswordCorrect = bcrypt.compareSync(password, isValidUser.password);
+    if(!isPasswordCorrect) {
+        res.status(401);
+        throw new Error("Invalid Credentials");
+    }
+    res.status(200).json({
+        message: "User logged in successfully",
+        user: isValidUser,
+    });
+})
