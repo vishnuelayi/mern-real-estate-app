@@ -2,6 +2,7 @@ import express from "express"
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import cors from "cors";
 import userRouter from "./routes/userRoute.js";
 import authRouter from "./routes/authRoute.js";
 
@@ -9,6 +10,7 @@ dotenv.config();
 
 const app = express();
 
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 

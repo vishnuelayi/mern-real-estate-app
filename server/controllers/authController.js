@@ -28,13 +28,11 @@ export const signupController = asyncHandler(async (req, res) => {
 
 
 export const loginController = asyncHandler(async (req, res) => {
-    const { usernameOrEmail, password } = req.body;
-    const isValidUser = await User.findOne({
-        $or: [
-            { username: usernameOrEmail },
-            { email: usernameOrEmail }
-        ]
-    });
+    const { email, password } = req.body;
+    console.log(email, password);
+    
+    const isValidUser = await User.findOne({ email });
+    console.log(isValidUser);
     if(!isValidUser) {
         res.status(401);
         throw new Error("Invalid Credentials");
@@ -48,9 +46,6 @@ export const loginController = asyncHandler(async (req, res) => {
     res.cookie("access_token", token, {
         httpOnly:true,
         expires: new Date(Date.now() + (3 * 60 * 60 * 1000)) // 3 hours in milliseconds
-    }).status(200).json({
-        message: "User logged in successfully",
-        user: isValidUser,
-    });
+    }).status(200).json(isValidUser);
     
 })
