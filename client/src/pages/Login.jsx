@@ -18,6 +18,9 @@ const Login = () => {
     dispatch(loginUser(formData));
   };
 
+  const auth = useSelector((state) => state.auth.user);
+ 
+
   return (
     <div className="max-w-lg mx-auto">
       <h1 className="font-semibold text-3xl text-center my-7">Login</h1>

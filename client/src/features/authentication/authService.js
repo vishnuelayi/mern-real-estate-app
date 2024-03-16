@@ -9,12 +9,25 @@ const loginUser = async (data) => {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
+    return response.data;
   } catch (error) {
     console.log(error);
   }
 };
 
+const signupUser = async (data) => {
+  try {
+    const response = await axios.post(`${base_url}auth/signup`, data,{
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-const authService = {loginUser};
+
+const authService = {loginUser, signupUser};
 export default authService;
