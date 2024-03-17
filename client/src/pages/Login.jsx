@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../features/authentication/authSlice.js";
+import { googleAuth, loginUser } from "../features/authentication/authSlice.js";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase.js";
 
 const Login = () => {
-
+  const dispatch = useDispatch();
 
   //for google login authentication
   const handleGoogleLogin = async () => {
@@ -14,14 +14,12 @@ const Login = () => {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      console.log(result.user);
+      const { displayName, email, photoURL } = result.user;
+      dispatch(googleAuth({ name: displayName, email: email, image: photoURL }));
     } catch (err) {
       console.log(err);
     }
   };
-  
-
-  const dispatch = useDispatch();
 
   const [form, setForm] = useState({});
 

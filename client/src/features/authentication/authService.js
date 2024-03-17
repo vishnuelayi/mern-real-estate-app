@@ -29,5 +29,18 @@ const signupUser = async (data) => {
 }
 
 
-const authService = {loginUser, signupUser};
+const googleAuth = async (data) => {
+  try {
+    const response = await axios.post(`${base_url}auth/google`, data,{
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const authService = {loginUser, signupUser,googleAuth};
 export default authService;

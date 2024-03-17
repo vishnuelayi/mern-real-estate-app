@@ -33,6 +33,18 @@ export const signupUser = createAsyncThunk(
   }
 );
 
+export const googleAuth = createAsyncThunk(
+  "auth/google",
+  async (data, thunkAPI) => {
+    try {
+      const response = await authService.googleAuth(data);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Change to error.message
+    }
+  }
+)
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -68,6 +80,23 @@ export const authSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(signupUser.rejected, (state, action) => {
+        state.singnedInUser = [];
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.errorMessage = action.payload; // Change to action.payload
+      })
+      .addCase(googleAuth.pending, (state) => {
+        state.isLoading = true;
+        
+      })
+      .addCase(googleAuth.fulfilled, (state, action) => {
+        state.singnedInUser = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(googleAuth.rejected, (state, action) => {
         state.singnedInUser = [];
         state.isLoading = false;
         state.isSuccess = false;
