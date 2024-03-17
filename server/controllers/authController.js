@@ -58,10 +58,13 @@ export const loginController = asyncHandler(async (req, res) => {
     .json(isValidUser);
 });
 
-export const googleAuth = asyncHandler(async (req, res) => {
-  const { email, name } = req.body;
 
-  const user = User.findOne({ email });
+
+export const googleAuth = asyncHandler(async (req, res) => {
+  const { email, name,image } = req.body;
+  console.log(email, name,image);
+
+  const user = await User.findOne({ email }); // Make sure to await the query
   if (user) {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res
@@ -70,14 +73,34 @@ export const googleAuth = asyncHandler(async (req, res) => {
         expires: new Date(Date.now() + 3 * 60 * 60 * 1000), // 3 hours in milliseconds
       })
       .status(200)
-      .json(user);
+      .json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        username: user.username,
+        image: user.image
+        // Include any other necessary fields from the user object
+      });
   } else {
-    const user = await User.create({
+    const generatePassword = Math.random().toString(36).slice(-8);
+    const hashedPassword = bcrypt.hashSync(generatePassword, 10);
+
+    const newUser = await User.create({
       name,
       email,
-      password: "",
+      image,
+      password: hashedPassword,
       username: name?.toLowerCase().replace(/\s/g, ""),
+    
     });
-    res.status(201).json(user);
+    res.status(201).json({
+      _id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+      username: newUser.username,
+      image: newUser.image
+      // Include any other necessary fields from the newUser object
+    });
   }
 });
+
