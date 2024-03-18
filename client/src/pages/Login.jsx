@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { googleAuth, loginUser } from "../features/authentication/authSlice.js";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase.js";
 
 const Login = () => {
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   //for google login authentication
@@ -15,11 +17,23 @@ const Login = () => {
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
       const { displayName, email, photoURL } = result.user;
-      dispatch(googleAuth({ name: displayName, email: email, image: photoURL }));
+      dispatch(
+        googleAuth({ name: displayName, email: email, image: photoURL })
+      );
     } catch (err) {
       console.log(err);
     }
   };
+
+  const authState = useSelector((state) => state.auth);
+
+  const singnedInUser = useSelector((state) => state.auth?.singnedInUser);
+
+  useEffect(() => {
+    if(authState.singnedInUser !== undefined && authState.isError === false){
+      navigate("/");
+    }
+  },[authState])
 
   const [form, setForm] = useState({});
 

@@ -9,6 +9,10 @@ const loginUser = async (data) => {
         "Content-Type": "application/json",
       },
     });
+    if(response?.data)
+    {
+      localStorage.setItem("user", JSON.stringify(response.data));
+    }
     return response.data;
   } catch (error) {
     console.log(error);
@@ -36,6 +40,10 @@ const googleAuth = async (data) => {
         "Content-Type": "application/json",
       },
     });
+    if(response?.data)
+    {
+      localStorage.setItem("user", JSON.stringify(response.data));
+    }
     return response.data;
   } catch (error) {
     console.log(error);
