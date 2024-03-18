@@ -1,9 +1,10 @@
 import express from "express";
-import {demoRoute} from "../controllers/userController.js";
+import { updateUser } from "../controllers/userController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", demoRoute
-);
+router.post("/",authMiddleware ,updateUser);
+
 
 export default router;
