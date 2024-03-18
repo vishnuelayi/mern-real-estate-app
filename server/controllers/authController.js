@@ -55,16 +55,24 @@ export const loginController = asyncHandler(async (req, res) => {
       expires: new Date(Date.now() + 3 * 60 * 60 * 1000), // 3 hours in milliseconds
     })
     .status(200)
-    .json(isValidUser);
+    .json({
+      _id: isValidUser?._id,
+      name: isValidUser?.name,
+      email: isValidUser?.email,
+      username: isValidUser?.username,
+      image: isValidUser?.image,
+      token: token,
+    });
 });
 
-
-
+//for google login authentication
 export const googleAuth = asyncHandler(async (req, res) => {
-  const { email, name,image } = req.body;
-  console.log(email, name,image);
+  const { email, name, image } = req.body;
+  console.log(email, name, image);
 
-  const user = await User.findOne({ email }); // Make sure to await the query
+  const user = await User.findOne({ email });
+
+  //if the user already exist then just give a respones with jwt token
   if (user) {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res
@@ -78,10 +86,12 @@ export const googleAuth = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         username: user.username,
-        image: user.image
-        // Include any other necessary fields from the user object
+        image: user.image,
+        token: token
       });
-  } else {
+  }
+  //if the user does not exist then create a new user and give a respones with jwt token
+  else {
     const generatePassword = Math.random().toString(36).slice(-8);
     const hashedPassword = bcrypt.hashSync(generatePassword, 10);
 
@@ -91,16 +101,24 @@ export const googleAuth = asyncHandler(async (req, res) => {
       image,
       password: hashedPassword,
       username: name?.toLowerCase().replace(/\s/g, ""),
-    
     });
-    res.status(201).json({
-      _id: newUser._id,
-      name: newUser.name,
-      email: newUser.email,
-      username: newUser.username,
-      image: newUser.image
-      // Include any other necessary fields from the newUser object
-    });
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 3 * 60 * 60 * 1000), // 3 hours in milliseconds
+      })
+      .status(200)
+      .json({
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        username: newUser.username,
+        image: newUser.image,
+        token: token
+        // Include any other necessary fields from the user object
+      });
   }
 });
-
