@@ -68,7 +68,7 @@ export const loginController = asyncHandler(async (req, res) => {
 //for google login authentication
 export const googleAuth = asyncHandler(async (req, res) => {
   const { email, name, image } = req.body;
-  console.log(email, name, image);
+ 
 
   const user = await User.findOne({ email });
 
