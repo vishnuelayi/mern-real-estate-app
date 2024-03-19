@@ -12,12 +12,13 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-;
+import { updateProfileImage } from "../features/user/userSlice";
 
 const validationSchema = Yup.object({
   username: Yup.string().required("Username is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   name: Yup.string().required("Name is required"),
+  
 });
 
 const Profile = () => {
@@ -29,18 +30,13 @@ const Profile = () => {
   const [fileURL, setFileURL] = useState(undefined);
   const [uploadError, setUploadError] = useState(false);
 
-  const fileUR = "fahgaogjohgojgojgojg";
 
-  const [formData, setFormData] = useState({})
- console.log(formData);
 
-  
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
     }
   }, [file]);
-
 
   //firebase image upload configuration
   const handleFileUpload = async (file) => {
@@ -51,11 +47,17 @@ const Profile = () => {
       .then((snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
         setFilePercentage(progress);
         if (progress === 100) {
-          getDownloadURL(storageRef).then((url) => {
-            setFileURL(url);
-          });
+          getDownloadURL(storageRef)
+            .then((url) => {
+              setFileURL(url);
+            })
+            .catch((error) => {
+              setUploadError(true);
+              console.log(error);
+            });
         }
       })
       .catch((error) => {
@@ -64,8 +66,6 @@ const Profile = () => {
       });
   };
 
-
-
   const singnedInUser = JSON.parse(localStorage.getItem("user"));
 
   const formik = useFormik({
@@ -73,18 +73,27 @@ const Profile = () => {
       username: singnedInUser?.username,
       email: singnedInUser?.email,
       name: singnedInUser?.name,
+     
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      setFormData(JSON.stringify(values));
-      // dispatch(updateUser(JSON.stringify(values)));
+      dispatch(updateUser(JSON.stringify(values)));
     },
   });
+
+ 
 
   const handleLogout = () => {
     localStorage.clear();
     window.location.href = "/login";
   };
+
+  useEffect(() => {
+    // Do something with fileURL when it changes
+    if (fileURL) {
+      dispatch(updateProfileImage({image: fileURL}));
+    }
+  }, [fileURL]);
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -99,7 +108,7 @@ const Profile = () => {
         />
 
         <img
-          src={singnedInUser?.image}
+          src={fileURL || singnedInUser?.image}
           alt="profile image"
           className="rounded-full h-24 w-24 self-center object-cover cursor-pointer mt-2 mb-2"
           onClick={() => fileRef.current.click()}

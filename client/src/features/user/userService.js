@@ -18,6 +18,21 @@ export const updateUser = async (data) => {
   }
 };
 
-const userService = { updateUser };
+export const updateProfileImage = async (data) => {
+  const token = Token();
+  try {
+    const response = await axios.post(`${base_url}user/image`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const userService = { updateUser, updateProfileImage };
 
 export default userService;
