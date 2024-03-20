@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { MdEditSquare } from "react-icons/md";
+import { FiLogOut } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../features/user/userService";
 import {
@@ -13,12 +14,12 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { updateProfileImage } from "../features/user/userSlice";
+import { Link } from "react-router-dom";
 
 const validationSchema = Yup.object({
   username: Yup.string().required("Username is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   name: Yup.string().required("Name is required"),
-  
 });
 
 const Profile = () => {
@@ -31,8 +32,6 @@ const Profile = () => {
   const [uploadError, setUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   console.log(formData);
-
-
 
   useEffect(() => {
     if (file) {
@@ -75,18 +74,13 @@ const Profile = () => {
       username: singnedInUser?.username,
       email: singnedInUser?.email,
       name: singnedInUser?.name,
-     
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       setFormData(values);
       dispatch(updateUser(JSON.stringify(values)));
-      
-      
     },
   });
-
- 
 
   const handleLogout = () => {
     localStorage.clear();
@@ -96,7 +90,7 @@ const Profile = () => {
   useEffect(() => {
     // Do something with fileURL when it changes
     if (fileURL) {
-      dispatch(updateProfileImage({image: fileURL}));
+      dispatch(updateProfileImage({ image: fileURL }));
     }
   }, [fileURL]);
 
@@ -173,14 +167,22 @@ const Profile = () => {
         >
           Update
         </button>
+        <Link to={"/listing"}>
+          <button
+            className="text-white bg-green-700 rounded-lg p-3 uppercase disabled:opacity-80 hover:opacity-95 w-full"
+            type="button"
+          >
+            List a property
+          </button>
+        </Link>
 
-        <button
-          className="text-white bg-red-600 rounded-lg p-3 uppercase disabled:opacity-80 hover:opacity-95"
-          type="button"
+        <div
+          className="flex gap-2 justify-center text-red-600 font-semibold cursor-pointer mt-3"
           onClick={handleLogout}
         >
-          Logout
-        </button>
+          <span>Logout</span>
+          <FiLogOut className="mt-1" />
+        </div>
       </form>
     </div>
   );

@@ -6,7 +6,7 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Header from "./components/Header";
-
+import CreateList from "./pages/CreateList";
 
 const App = () => {
   return (
@@ -16,7 +16,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-
+        <Route path="/listing" element={<CreateList />} />
         <Route path="/profile" element={<Profile />} />
 
         <Route path="/about" element={<About />} />
