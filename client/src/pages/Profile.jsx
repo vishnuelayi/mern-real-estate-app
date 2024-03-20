@@ -29,6 +29,8 @@ const Profile = () => {
   const [filePercentage, setFilePercentage] = useState(0);
   const [fileURL, setFileURL] = useState(undefined);
   const [uploadError, setUploadError] = useState(false);
+  const [formData, setFormData] = useState({});
+  console.log(formData);
 
 
 
@@ -77,7 +79,10 @@ const Profile = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      setFormData(values);
       dispatch(updateUser(JSON.stringify(values)));
+      
+      
     },
   });
 
@@ -121,7 +126,7 @@ const Profile = () => {
             placeholder="name"
             onChange={formik.handleChange("name")}
             onBlur={formik.handleBlur("name")}
-            value={formik.values.name}
+            value={formData?.name || formik.values.name}
           />
           <button
             type="button"
