@@ -7,12 +7,71 @@ import {
 import { app } from "../firebase";
 import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import { addProperty } from "../features/listing/listingSlice";
+
+const validationSchema = Yup.object().shape({
+  title: Yup.string().required("Title is required"),
+  description: Yup.string().required("Description is required"),
+  price: Yup.number()
+    .required("Price is required")
+    .positive("Price must be a positive number"),
+  bedrooms: Yup.number()
+    .required("Number of bedrooms is required")
+    .integer("Number of bedrooms must be an integer")
+    .min(1, "Number of bedrooms must be at least 1"),
+  bathrooms: Yup.number()
+    .required("Number of bathrooms is required")
+    .integer("Number of bathrooms must be an integer")
+    .min(1, "Number of bathrooms must be at least 1"),
+  area: Yup.number()
+    .required("Area is required")
+    .positive("Area must be a positive number"),
+  location: Yup.string().required("Location is required"),
+});
 
 const CreateList = () => {
+  const dispatch = useDispatch();
+
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({ imageUrls: [] });
   const [uploadError, setUploadError] = useState(false);
   const [filePercentage, setFilePercentage] = useState(0);
+  const [amenities, setAmenities] = useState([]);
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      description: "",
+      price: null,
+      bedrooms: null,
+      bathrooms: null,
+      area: null,
+      location: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      const finalData = {
+        ...values,
+        images: formData?.imageUrls,
+        amenities: amenities,
+      };
+      
+      dispatch(addProperty(finalData));
+    },
+  });
+
+  //handler for receiving checkbox data
+  const handleCheckboxChange = (event) => {
+    const value = event.target.value;
+    if (event.target.checked) {
+      setAmenities([...amenities, value]);
+    } else {
+      setAmenities(amenities.filter((amenity) => amenity !== value));
+    }
+  };
 
   //handler for deleting uploaded picture
   const handleDeletePicture = (index) => {
@@ -22,6 +81,7 @@ const CreateList = () => {
     });
   };
 
+  // handler for uploading pictures
   const handleUpload = () => {
     if (files?.length > 0 && files?.length < 7) {
       const promises = [];
@@ -41,6 +101,7 @@ const CreateList = () => {
     }
   };
 
+  //firebase configuration for image upload
   const storeImage = async (file) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
@@ -72,48 +133,99 @@ const CreateList = () => {
 
   return (
     <div className="p-3 max-w-4xl mx-auto">
-      <h1 className="text-center my-7 font-semibold text-3xl">
-        Add a Property
+      <h1 className="text-center my-7 font-semibold text-3xl text-slate-700">
+        LIST A PROPERTY
       </h1>
-      <form className="flex flex-col sm:flex-row gap-4">
+      <form
+        className="flex flex-col sm:flex-row gap-4"
+        onSubmit={formik.handleSubmit}
+      >
         <div className="flex flex-col gap-3 flex-1">
           <input
             placeholder="Title"
             className="border p-3 rounded-md focus-within:outline-none"
+            name="title"
+            value={formik.values.title}
+            onChange={formik.handleChange("title")}
+            onBlur={formik.handleBlur("title")}
           />
           <textarea
             placeholder="Description"
             className="border p-3 rounded-md focus-within:outline-none"
+            name="description"
+            value={formik.values.description}
+            onChange={formik.handleChange("description")}
+            onBlur={formik.handleBlur("description")}
           />
           <input
             placeholder="Location"
             className="border p-3 rounded-md focus-within:outline-none"
+            name="location"
+            value={formik.values.location}
+            onChange={formik.handleChange("location")}
+            onBlur={formik.handleBlur("location")}
           />
 
           <div className="flex gap-4 flex-wrap">
             <div className="flex gap-2">
-              <input placeholder="Price" type="checkbox" className="w-5" />
+              <input
+                placeholder="Price"
+                type="checkbox"
+                className="w-5"
+                value="Pool"
+                onClick={handleCheckboxChange}
+              />
               <span>Pool</span>
             </div>
             <div className="flex gap-2">
-              <input placeholder="Price" type="checkbox" className="w-5" />
+              <input
+                placeholder="Price"
+                type="checkbox"
+                className="w-5"
+                value="Garden"
+                onClick={handleCheckboxChange}
+              />
               <span>Gardern</span>
             </div>
             <div className="flex gap-2">
-              <input placeholder="Price" type="checkbox" className="w-5" />
+              <input
+                placeholder="Price"
+                type="checkbox"
+                className="w-5"
+                value="Fireplace"
+                onClick={handleCheckboxChange}
+              />
               <span>Fireplace</span>
             </div>
             <div className="flex gap-2">
-              <input placeholder="Price" type="checkbox" className="w-5" />
+              <input
+                placeholder="Price"
+                type="checkbox"
+                className="w-5"
+                value="Wi-Fi"
+                onClick={handleCheckboxChange}
+              />
               <span>Wi-Fi</span>
             </div>
             <div className="flex gap-2">
-              <input placeholder="Price" type="checkbox" className="w-5" />
+              <input
+                placeholder="Price"
+                type="checkbox"
+                className="w-5"
+                value="Parking Space"
+                onClick={handleCheckboxChange}
+              />
               <span>Parking space</span>
             </div>
 
             <div className="flex gap-2">
-              <input placeholder="Price" type="checkbox" className="w-5" />
+              <input
+                placeholder="Price"
+                type="checkbox"
+                className="w-5"
+                value="Gym"
+                onClick={handleCheckboxChange}
+              />
               <span>Gym</span>
             </div>
           </div>
@@ -125,6 +237,10 @@ const CreateList = () => {
                 type="number"
                 min={1}
                 max={10}
+                name="bedrooms"
+                value={formik.values.bedrooms}
+                onChange={formik.handleChange("bedrooms")}
+                onBlur={formik.handleBlur("bedrooms")}
               />
               <p className="mt-3">Bedrooms</p>
             </div>
@@ -134,6 +250,10 @@ const CreateList = () => {
                 type="number"
                 min={1}
                 max={10}
+                name="bathrooms"
+                value={formik.values.bathrooms}
+                onChange={formik.handleChange("bathrooms")}
+                onBlur={formik.handleBlur("bathrooms")}
               />
               <p className="mt-3">Bathrooms</p>
             </div>
@@ -143,6 +263,10 @@ const CreateList = () => {
                 className="border-gray-300 p-3 rounded-md focus-within:outline-none"
                 type="number"
                 min={1}
+                name="area"
+                value={formik.values.area}
+                onChange={formik.handleChange("area")}
+                onBlur={formik.handleBlur("area")}
               />
               <p className="mt-3">Area (sq m)</p>
             </div>
@@ -152,6 +276,10 @@ const CreateList = () => {
                 className="border-gray-300 p-3 rounded-md focus-within:outline-none"
                 type="number"
                 min={1}
+                name="price"
+                value={formik.values.price}
+                onChange={formik.handleChange("price")}
+                onBlur={formik.handleBlur("price")}
               />
               <p className="mt-3">Price (₹)</p>
             </div>
@@ -203,7 +331,10 @@ const CreateList = () => {
                 </div>
               );
             })}
-          <button className="text-white bg-slate-700 rounded-md p-3 hover:opacity-95 disabled:opacity-85">
+          <button
+            className="text-white bg-slate-700 rounded-md p-3 hover:opacity-95 disabled:opacity-85 "
+            type="submit"
+          >
             ADD PROPERTY
           </button>
         </div>
