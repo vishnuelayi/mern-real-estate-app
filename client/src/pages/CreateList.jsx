@@ -5,11 +5,11 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProperty } from "../features/listing/listingSlice";
 
 const validationSchema = Yup.object().shape({
@@ -41,6 +41,11 @@ const CreateList = () => {
   const [filePercentage, setFilePercentage] = useState(0);
   const [amenities, setAmenities] = useState([]);
 
+  //redux state of listing
+
+  const listingState = useSelector((state) => state.listing);
+  console.log(listingState);
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -58,10 +63,18 @@ const CreateList = () => {
         images: formData?.imageUrls,
         amenities: amenities,
       };
-      
-      dispatch(addProperty(finalData));
+      dispatch(addProperty(JSON.stringify(finalData)));
+      formik.resetForm();
     },
   });
+
+  //useEffect for resetting form and redirecting after successfull submition of property listing
+  useEffect(() => {
+    if (listingState?.property !== null && listingState?.isError === false) {
+      formik.resetForm();
+    }
+  }, [listingState]);
+  
 
   //handler for receiving checkbox data
   const handleCheckboxChange = (event) => {

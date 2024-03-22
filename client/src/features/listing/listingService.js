@@ -1,4 +1,6 @@
 import { Token } from "../../utils/getToken";
+import { base_url } from "../../utils/baseUrl";
+import axios from "axios";
 
 const addProperty = async (data) => {
     const token = Token();
