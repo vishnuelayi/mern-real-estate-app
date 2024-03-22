@@ -6,8 +6,9 @@ const router = express.Router();
 
 
 router.post("/add", authMiddleware,listOneItem);
-router.get("/:id",getSingleItem)
 router.get("/mylistings", authMiddleware,getItemsByUser)
+router.get("/:id",getSingleItem)
+
 
 
 

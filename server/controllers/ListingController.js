@@ -12,6 +12,7 @@ export const listOneItem = async (req, res) => {
 
 export const getItemsByUser = async (req, res) => {
   const user = req.user;
+ 
   try {
     const items = await List.find({ listedBy: user._id });
     res.status(200).json(items);
