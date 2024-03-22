@@ -6,7 +6,7 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   isError: false,
-  errorMessage: "", 
+  errorMessage: "",
 };
 
 export const addProperty = createAsyncThunk(
@@ -21,7 +21,29 @@ export const addProperty = createAsyncThunk(
   }
 );
 
+export const getPropertiesUser = createAsyncThunk(
+  "listing/get",
+  async (thunkAPI) => {
+    try {
+      const response = await listingService.getPropertiesUser();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Change to error.message
+    }
+  }
+);
 
+export const getSingleProperty = createAsyncThunk(
+  "listing/get-one",
+  async (data, thunkAPI) => {
+    try {
+      const response = await listingService.getSingleProperty(data);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Change to error.message
+    }
+  }
+);
 
 export const listingSlice = createSlice({
   name: "listing",
@@ -37,9 +59,8 @@ export const listingSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        if(state.isSuccess)
-        {
-            console.log("property added success fully");
+        if (state.isSuccess) {
+          console.log("property added success fully");
         }
       })
       .addCase(addProperty.rejected, (state, action) => {
@@ -47,8 +68,40 @@ export const listingSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
-        state.errorMessage = action.payload; // Change to action.payload
-      }) 
+        state.errorMessage = action.payload;
+      })
+      .addCase(getPropertiesUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getPropertiesUser.fulfilled, (state, action) => {
+        state.property = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(getPropertiesUser.rejected, (state, action) => {
+        state.property = null;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+      .addCase(getSingleProperty.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSingleProperty.fulfilled, (state, action) => {
+        state.property = action.payload;
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(getSingleProperty.rejected, (state, action) => {
+        state.property = null;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      });
   },
 });
 

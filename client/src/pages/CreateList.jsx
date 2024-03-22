@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { addProperty } from "../features/listing/listingSlice";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
@@ -34,12 +35,14 @@ const validationSchema = Yup.object().shape({
 
 const CreateList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({ imageUrls: [] });
   const [uploadError, setUploadError] = useState(false);
   const [filePercentage, setFilePercentage] = useState(0);
   const [amenities, setAmenities] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   //redux state of listing
 
@@ -70,11 +73,11 @@ const CreateList = () => {
 
   //useEffect for resetting form and redirecting after successfull submition of property listing
   useEffect(() => {
-    if (listingState?.property !== null && listingState?.isError === false) {
+    if (listingState?.property !== null && listingState?.isError !== true) {
       formik.resetForm();
+      navigate(`listing/${listingState?.property?._id}`);
     }
   }, [listingState]);
-  
 
   //handler for receiving checkbox data
   const handleCheckboxChange = (event) => {
@@ -97,6 +100,8 @@ const CreateList = () => {
   // handler for uploading pictures
   const handleUpload = () => {
     if (files?.length > 0 && files?.length < 7) {
+      setIsLoading(true);
+
       const promises = [];
 
       for (let i = 0; i < files?.length; i++) {
@@ -130,6 +135,7 @@ const CreateList = () => {
             getDownloadURL(storageRef)
               .then((url) => {
                 resolve(url);
+                setIsLoading(false);
               })
               .catch((error) => {
                 setUploadError(true);
@@ -347,6 +353,7 @@ const CreateList = () => {
           <button
             className="text-white bg-slate-700 rounded-md p-3 hover:opacity-95 disabled:opacity-85 "
             type="submit"
+            disabled={isLoading}
           >
             ADD PROPERTY
           </button>
