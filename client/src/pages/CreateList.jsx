@@ -47,7 +47,7 @@ const CreateList = () => {
   //redux state of listing
 
   const listingState = useSelector((state) => state.listing);
-  console.log(listingState);
+ 
 
   const formik = useFormik({
     initialValues: {
@@ -67,15 +67,15 @@ const CreateList = () => {
         amenities: amenities,
       };
       dispatch(addProperty(JSON.stringify(finalData)));
-      formik.resetForm();
+      
     },
   });
 
   //useEffect for resetting form and redirecting after successfull submition of property listing
   useEffect(() => {
-    if (listingState?.property !== null && listingState?.isError !== true) {
+    if (listingState?.addedProperty !== null && listingState?.isError !== true) {
       formik.resetForm();
-      navigate(`listing/${listingState?.property?._id}`);
+      navigate(`/listing/${listingState?.addedProperty?._id}`);
     }
   }, [listingState]);
 

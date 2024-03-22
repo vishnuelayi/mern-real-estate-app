@@ -26,7 +26,7 @@ const getPropertiesUser = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response;
+    return response.data;
   } catch (error) {
     console.log(error);
   }

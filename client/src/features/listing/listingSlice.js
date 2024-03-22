@@ -3,6 +3,7 @@ import listingService from "./listingService";
 
 const initialState = {
   property: null,
+  addedProperty:null,
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -55,7 +56,7 @@ export const listingSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(addProperty.fulfilled, (state, action) => {
-        state.property = action.payload;
+        state.addedProperty = action.payload;
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
@@ -64,7 +65,7 @@ export const listingSlice = createSlice({
         }
       })
       .addCase(addProperty.rejected, (state, action) => {
-        state.property = null;
+        state.addedProperty = null;
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
