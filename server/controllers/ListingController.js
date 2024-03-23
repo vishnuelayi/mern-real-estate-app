@@ -12,7 +12,7 @@ export const listOneItem = async (req, res) => {
 
 export const getItemsByUser = async (req, res) => {
   const user = req.user;
- 
+
   try {
     const items = await List.find({ listedBy: user._id });
     res.status(200).json(items);
@@ -33,14 +33,10 @@ export const getSingleItem = async (req, res) => {
 };
 
 export const deleteItem = async (req, res) => {
-  const user = req.user;
   const { id } = req.params;
+
   try {
-    const item = await List.findOne({ _id: id, listedBy: user._id });
-    if (!item) {
-      res.status(404).json({ message: "Item not found" });
-    }
-    await item.remove();
+    await List.findByIdAndDelete(id);
     res.status(200).json({ message: "Item deleted successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
