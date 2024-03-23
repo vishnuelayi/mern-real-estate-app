@@ -35,12 +35,27 @@ const getPropertiesUser = async () => {
 const getSingleProperty = async (data) => {
   try {
     const response = await axios.get(`${base_url}listing/${data}`);
-    return response;
+    return response.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-const listingService = { addProperty, getPropertiesUser, getSingleProperty };
+const deleteItem = async (data) => {
+  const token = Token();
+  
+  const {id} = data
+ 
+  
+  try {
+    const response = await axios.delete(`${base_url}listing/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+const listingService = { addProperty, getPropertiesUser, getSingleProperty,deleteItem };
 
 export default listingService;
