@@ -8,6 +8,7 @@ import About from "./pages/About";
 import Header from "./components/Header";
 import CreateList from "./pages/CreateList";
 import Mylistings from "./pages/Mylistings";
+import SingleList from "./pages/SingleList";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/mylistings" element={<Mylistings/>} />
         <Route path="/listing" element={<CreateList />} />
+        <Route path="listing/:id" element={<SingleList />} />
         <Route path="/profile" element={<Profile />} />
         
 

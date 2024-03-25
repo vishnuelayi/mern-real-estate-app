@@ -43,19 +43,27 @@ const getSingleProperty = async (data) => {
 
 const deleteItem = async (data) => {
   const token = Token();
-  
-  const {id} = data
- 
-  
+
+  const { id } = data;
+
   try {
-    const response = await axios.delete(`${base_url}listing/delete/${id}`);
+    const response = await axios.delete(`${base_url}listing/delete/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-
-const listingService = { addProperty, getPropertiesUser, getSingleProperty,deleteItem };
+const listingService = {
+  addProperty,
+  getPropertiesUser,
+  getSingleProperty,
+  deleteItem,
+};
 
 export default listingService;
