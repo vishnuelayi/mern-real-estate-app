@@ -175,13 +175,21 @@ const Profile = () => {
             List a property
           </button>
         </Link>
-
-        <div
-          className="flex gap-2 justify-center text-red-600 font-semibold cursor-pointer mt-3"
-          onClick={handleLogout}
-        >
-          <span>Logout</span>
-          <FiLogOut className="mt-1" />
+        <div className="flex justify-between">
+          <div>
+            <Link to="/mylistings">
+              <span className="text-green-700 cursor-pointer font-semibold">
+                My Listings
+              </span>
+            </Link>
+          </div>
+          <div
+            className="flex gap-2 justify-center text-red-600 font-semibold cursor-pointer "
+            onClick={handleLogout}
+          >
+            <span>Logout</span>
+            <FiLogOut className="mt-1" />
+          </div>
         </div>
       </form>
     </div>
