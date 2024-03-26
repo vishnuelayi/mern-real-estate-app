@@ -17,18 +17,19 @@ const SwiperComponent = (props) => {
         navigation
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log("slide change")}
+        // onSwiper={(swiper) => console.log(swiper)}
+        // onSlideChange={() => console.log("slide change")}
       >
         {props?.images?.map((item) => {
           return (
             <SwiperSlide key={item}>
-              
               <div
-              className="h-[550px]"
-              style={{background: `url(${item}) center no-repeat`, backgroundSize:'cover'}}>
-
-              </div>
+                className="h-[550px]"
+                style={{
+                  background: `url(${item}) center no-repeat`,
+                  backgroundSize: "cover",
+                }}
+              ></div>
             </SwiperSlide>
           );
         })}
