@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import CreateList from "./pages/CreateList";
 import Mylistings from "./pages/Mylistings";
 import SingleList from "./pages/SingleList";
+import Search from "./pages/Search";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/listing" element={<CreateList />} />
         <Route path="listing/:id" element={<SingleList />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/search" element={<Search/>} />
         
 
         <Route path="/about" element={<About />} />
