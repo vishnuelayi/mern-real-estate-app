@@ -191,7 +191,7 @@ const CreateList = () => {
                 placeholder="Price"
                 type="checkbox"
                 className="w-5"
-                value="Pool"
+                value="pool"
                 onClick={handleCheckboxChange}
               />
               <span>Pool</span>
@@ -201,7 +201,7 @@ const CreateList = () => {
                 placeholder="Price"
                 type="checkbox"
                 className="w-5"
-                value="Garden"
+                value="garden"
                 onClick={handleCheckboxChange}
               />
               <span>Gardern</span>
@@ -211,7 +211,7 @@ const CreateList = () => {
                 placeholder="Price"
                 type="checkbox"
                 className="w-5"
-                value="Fireplace"
+                value="fireplace"
                 onClick={handleCheckboxChange}
               />
               <span>Fireplace</span>
@@ -221,7 +221,7 @@ const CreateList = () => {
                 placeholder="Price"
                 type="checkbox"
                 className="w-5"
-                value="Wi-Fi"
+                value="wifi"
                 onClick={handleCheckboxChange}
               />
               <span>Wi-Fi</span>
@@ -231,10 +231,10 @@ const CreateList = () => {
                 placeholder="Price"
                 type="checkbox"
                 className="w-5"
-                value="Parking Space"
+                value="parking"
                 onClick={handleCheckboxChange}
               />
-              <span>Parking space</span>
+              <span>Parking</span>
             </div>
 
             <div className="flex gap-2">
@@ -242,7 +242,7 @@ const CreateList = () => {
                 placeholder="Price"
                 type="checkbox"
                 className="w-5"
-                value="Gym"
+                value="gym"
                 onClick={handleCheckboxChange}
               />
               <span>Gym</span>
