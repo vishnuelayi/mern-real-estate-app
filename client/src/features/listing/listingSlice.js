@@ -4,6 +4,7 @@ import listingService from "./listingService";
 const initialState = {
   property: null,
   addedProperty: null,
+  properties:null,
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -51,6 +52,19 @@ export const deleteItem = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const response = await listingService.deleteItem(data);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+
+export const getItemsOnQuery = createAsyncThunk(
+  "listing/search",
+  async (query, thunkAPI) => {
+    try {
+      const response = await listingService.getItemsOnQuery(query);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -124,6 +138,21 @@ export const listingSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(deleteItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+      .addCase(getItemsOnQuery.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getItemsOnQuery.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.properties = action.payload;
+      })
+      .addCase(getItemsOnQuery.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;

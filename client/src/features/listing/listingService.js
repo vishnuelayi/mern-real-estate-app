@@ -59,11 +59,30 @@ const deleteItem = async (data) => {
   }
 };
 
+const getItemsOnQuery = async (query) => {
+  const token = Token();
+
+  try {
+    const response = await axios.get(`${base_url}listing/get`, {
+      params: query,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const listingService = {
   addProperty,
   getPropertiesUser,
   getSingleProperty,
   deleteItem,
+  getItemsOnQuery
 };
 
 export default listingService;
