@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getItemsOnQuery } from "../features/listing/listingSlice";
+import PropertyCard from "../components/PropertyCard";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -181,6 +182,8 @@ const Search = () => {
         <h1 className="text-3xl font-semibold p-3 text-slate-700 mt-5 ml-2">
           Search Results
         </h1>
+        <PropertyCard/>
+      
       </div>
     </div>
   );

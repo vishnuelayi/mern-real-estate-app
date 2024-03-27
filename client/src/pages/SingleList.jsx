@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getSingleProperty } from "../features/listing/listingSlice";
-import { MdOutlinePool } from "react-icons/md";
-import { FaCarAlt } from "react-icons/fa";
-import { GiFlowerPot } from "react-icons/gi";
+
 
 import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
@@ -62,8 +60,8 @@ const SingleList = () => {
           </div>
 
           <div className="flex gap-4 ml-5 items-center mt-5">
-            <p className=" text-white bg-red-700 rounded-md px-10 py-2 cursor-pointer">I'm Intrested</p>
-            <p className=" text-white bg-blue-700 rounded-md px-10 py-2 cursor-pointer">Quote a bid</p>
+            <p className=" text-white bg-red-700 rounded-md px-10 py-2 cursor-pointer hover:opacity-95">I'm Intrested</p>
+            <p className=" text-white bg-blue-700 rounded-md px-10 py-2 cursor-pointer hover:opacity-95">Quote a bid</p>
           </div>
         </main>
       )}
