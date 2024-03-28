@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getItemsOnQuery } from "../features/listing/listingSlice";
 import PropertyCard from "../components/PropertyCard";
@@ -16,6 +16,9 @@ const Search = () => {
     wifi: false,
   });
 
+  const propertiesOnSearch = useSelector((state) => state.listing.properties);
+  console.log(propertiesOnSearch);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
 
@@ -24,14 +27,13 @@ const Search = () => {
     const gardenFromUrl = urlParams.get("garden");
     const parkingFromUrl = urlParams.get("parking");
     const wifiFromUrl = urlParams.get("wifi");
- 
 
     if (
       searchTermFromUrl ||
       poolFromUrl ||
       gardenFromUrl ||
       parkingFromUrl ||
-      wifiFromUrl 
+      wifiFromUrl
     ) {
       setSideBarData({
         searchTerm: searchTermFromUrl || "",
@@ -39,7 +41,6 @@ const Search = () => {
         garden: gardenFromUrl === "true" ? true : false,
         parking: parkingFromUrl === "true" ? true : false,
         wifi: wifiFromUrl === "true" ? true : false,
-        
       });
     }
   }, [location.search]);
@@ -74,7 +75,7 @@ const Search = () => {
     const searchQuery = urlParams.toString();
 
     navigate(`/search?${searchQuery}`);
-    alert(searchQuery)
+
     dispatch(getItemsOnQuery(urlParams));
   };
 
@@ -182,8 +183,15 @@ const Search = () => {
         <h1 className="text-3xl font-semibold p-3 text-slate-700 mt-5 ml-2">
           Search Results
         </h1>
-        <PropertyCard/>
-      
+        {propertiesOnSearch?.length === 0 && (
+          <p className="p-5 text-slate-700 ">No Results Found !</p>
+        )}
+        <div className="flex flex-wrap">
+          {propertiesOnSearch &&
+            propertiesOnSearch?.map((item, index) => {
+              return <PropertyCard key={index} property={item} />;
+            })}
+        </div>
       </div>
     </div>
   );

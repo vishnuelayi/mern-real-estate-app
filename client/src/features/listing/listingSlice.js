@@ -153,6 +153,7 @@ export const listingSlice = createSlice({
         state.properties = action.payload;
       })
       .addCase(getItemsOnQuery.rejected, (state, action) => {
+        state.properties = null;
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
