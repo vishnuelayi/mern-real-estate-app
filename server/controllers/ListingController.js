@@ -96,7 +96,7 @@ export const getItemsOnQuery = async (req, res) => {
     const searchTerm = req.query.searchTerm
       ? { title: { $regex: new RegExp(req.query.searchTerm, "i") } }
       : {};
-    const sort = req.query.sort || "createdAt";
+    const sort =  "createdAt";
     const order = req.query.order === "asc" ? 1 : -1;
 
     // Parse nested fields
