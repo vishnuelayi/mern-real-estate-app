@@ -32,6 +32,15 @@ const getPropertiesUser = async () => {
   }
 };
 
+const getAllProperties = async () => {
+  try {
+    const response = await axios.get(`${base_url}listing/`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getSingleProperty = async (data) => {
   try {
     const response = await axios.get(`${base_url}listing/${data}`);
@@ -81,8 +90,9 @@ const listingService = {
   addProperty,
   getPropertiesUser,
   getSingleProperty,
+  getAllProperties,
   deleteItem,
-  getItemsOnQuery
+  getItemsOnQuery,
 };
 
 export default listingService;

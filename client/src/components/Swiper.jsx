@@ -21,6 +21,7 @@ const SwiperComponent = (props) => {
         // onSlideChange={() => console.log("slide change")}
       >
         {props?.images?.map((item) => {
+          console.log(item);
           return (
             <SwiperSlide key={item}>
               <div

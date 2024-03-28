@@ -35,6 +35,17 @@ export const getPropertiesUser = createAsyncThunk(
   }
 );
 
+export const getAllProperties = createAsyncThunk("listing/all", async (thunkAPI) => {
+  try {
+    const response = await listingService.getAllProperties();
+    return response;
+  }
+  catch(error)
+  {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+})
+
 export const getSingleProperty = createAsyncThunk(
   "listing/get-one",
   async (data, thunkAPI) => {
@@ -158,7 +169,23 @@ export const listingSlice = createSlice({
         state.isSuccess = false;
         state.isError = true;
         state.errorMessage = action.payload;
-      });
+      })
+      .addCase(getAllProperties.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllProperties.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.properties = action.payload;
+      })
+      .addCase(getAllProperties.rejected, (state, action) => {
+        state.properties = null;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      });;
   },
 });
 
