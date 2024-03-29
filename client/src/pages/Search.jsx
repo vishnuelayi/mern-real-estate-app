@@ -186,10 +186,16 @@ const Search = () => {
         {propertiesOnSearch?.length === 0 && (
           <p className="p-5 text-slate-700 ">No Results Found !</p>
         )}
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap p-3">
           {propertiesOnSearch &&
             propertiesOnSearch?.map((item, index) => {
-              return <PropertyCard key={index} property={item} />;
+              return (
+                <div key={index} className="w-1/3 p-2">
+                  {" "}
+                  {/* Dividing the container into thirds */}
+                  <PropertyCard property={item} />
+                </div>
+              );
             })}
         </div>
       </div>

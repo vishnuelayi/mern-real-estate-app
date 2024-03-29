@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const PropertyCard = ({ property }) => {
   return (
-    <div className=" w-full sm:w-[330px] rounded-lg bg-white ml-5 mt-3 overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+    <div className=" w-full sm:w-[330px] rounded-lg bg-white mx-auto mt-3 overflow-hidden shadow-md hover:shadow-lg transition-shadow">
       <Link to={`/listing/${property._id}`}>
         <img
           src={property?.images[0]}
